@@ -31,6 +31,27 @@ const App = () => {
       { label: 'Mon - Wed', time: '09:00 - 17:00' },
       { label: 'Thu - Fri', time: '11:00 - 19:00' },
       { label: 'Sat - Sun', time: '10:00 - 14:00' },
+    ],
+    splitMonWed: [
+      { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Wed', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Thu - Fri', time: '09:00 - 17:00' },
+      { label: 'Sat - Sun', time: 'Closed', isClosed: true },
+    ],
+    splitGroupedDays: [
+      { label: 'Mon - Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+      { label: 'Thu - Fri', time: ['10:00 - 14:00', '16:00 - 20:00'] },
+      { label: 'Sat - Sun', time: 'Closed', isClosed: true },
+    ],
+    horizontalSplits: [
+      { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+      { label: 'Thu', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+      { label: 'Fri', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+      { label: 'Sat', time: ['10:00 - 12:00', '13:00 - 15:00'] },
+      { label: 'Sun', time: 'Closed', isClosed: true },
     ]
   };
 
@@ -48,6 +69,9 @@ const App = () => {
           <button onClick={() => setActiveScenario('weekdayWeekend')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'weekdayWeekend' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Weekday/Weekend</button>
           <button onClick={() => setActiveScenario('mixedClosed')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'mixedClosed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Sun Closed</button>
           <button onClick={() => setActiveScenario('customGrouped')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'customGrouped' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Custom Groups</button>
+          <button onClick={() => setActiveScenario('splitMonWed')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'splitMonWed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Split Shifts (Mon-Wed)</button>
+          <button onClick={() => setActiveScenario('splitGroupedDays')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'splitGroupedDays' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Split Shifts (Grouped)</button>
+          <button onClick={() => setActiveScenario('horizontalSplits')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'horizontalSplits' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Horizontal Splits (All Days)</button>
         </div>
       </div>
 
@@ -93,7 +117,7 @@ const App = () => {
           <div className="mt-2 border border-[#cbd5e1] rounded-lg p-4 flex flex-col md:flex-row justify-between gap-6">
             
             {/* Left Column: Address */}
-            <div className="flex-1 flex flex-col gap-1.5 leading-snug text-[#0f172a]">
+            <div className="flex-[0.8] flex flex-col gap-1.5 leading-snug text-[#0f172a]">
               <div className="font-bold">CRL</div>
               <div>Medrite Urgent Care</div>
               <div>- Williamsburg</div>
@@ -107,19 +131,26 @@ const App = () => {
             </div>
 
             {/* Middle Column: Timings (DYNAMIC PART) */}
-            <div className="flex-1 font-semibold text-[#0f172a]">
+            <div className="flex-[1.8] font-semibold text-[#0f172a] overflow-hidden">
               <div className="flex flex-col gap-1.5">
-                {currentTimings.map((timing, index) => (
-                  <div key={index} className="flex">
-                    <span className="w-20 inline-block">{timing.label}</span>
-                    <span className={timing.isClosed ? 'text-red-500' : ''}>{timing.time}</span>
-                  </div>
-                ))}
+                {currentTimings.map((timing, index) => {
+                  // Ensure times are always treated as an array to handle multiple shifts
+                  const times = Array.isArray(timing.time) ? timing.time : [timing.time];
+                  
+                  return (
+                    <div key={index} className="flex gap-2 whitespace-nowrap">
+                      <span className="w-24 inline-block shrink-0">{timing.label}</span>
+                      <span className={`${timing.isClosed ? 'text-red-500' : ''}`}>
+                        {times.join(', ')}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
             {/* Right Column: Actions */}
-            <div className="flex flex-col items-end gap-3 flex-[0.8]">
+            <div className="flex flex-col items-end gap-3 flex-[0.7]">
               <a href="#" className="text-[#0056b3] font-bold text-[11px] uppercase hover:underline">
                 Change Location
               </a>
