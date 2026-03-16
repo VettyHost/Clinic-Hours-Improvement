@@ -1,176 +1,211 @@
-import React, { useState } from 'react';
-import { AlertCircle, ExternalLink, FileText } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Panel Drug Order Details</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ensuring basic sans-serif font matching the original design */
+        body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
 
-const App = () => {
-  const [activeScenario, setActiveScenario] = useState('original');
+<div class="p-6 flex flex-col items-center text-[13px] text-gray-800">
 
-  // Definitions for the different timing scenarios
-  const scenarios = {
-    original: [
-      { label: 'Mon', time: '09:00 - 20:30' },
-      { label: 'Tue', time: '09:00 - 20:30' },
-      { label: 'Wed', time: '09:00 - 20:30' },
-      { label: 'Thu', time: '09:00 - 20:30' },
-      { label: 'Fri', time: '09:00 - 20:30' },
-      { label: 'Sat', time: '09:00 - 20:30' },
-      { label: 'Sun', time: '09:00 - 20:30' },
-    ],
-    allSame: [
-      { label: 'Mon - Sun', time: '09:00 - 20:30' },
-    ],
-    weekdayWeekend: [
-      { label: 'Mon - Fri', time: '09:00 - 17:00' },
-      { label: 'Sat - Sun', time: '10:00 - 14:00' },
-    ],
-    mixedClosed: [
-      { label: 'Mon - Fri', time: '09:00 - 17:00' },
-      { label: 'Sat', time: '10:00 - 15:00' },
-      { label: 'Sun', time: 'Closed', isClosed: true },
-    ],
-    customGrouped: [
-      { label: 'Mon - Wed', time: '09:00 - 17:00' },
-      { label: 'Thu - Fri', time: '11:00 - 19:00' },
-      { label: 'Sat - Sun', time: '10:00 - 14:00' },
-    ],
-    splitMonWed: [
-      { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Wed', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Thu - Fri', time: '09:00 - 17:00' },
-      { label: 'Sat - Sun', time: 'Closed', isClosed: true },
-    ],
-    splitGroupedDays: [
-      { label: 'Mon - Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
-      { label: 'Thu - Fri', time: ['10:00 - 14:00', '16:00 - 20:00'] },
-      { label: 'Sat - Sun', time: 'Closed', isClosed: true },
-    ],
-    horizontalSplits: [
-      { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
-      { label: 'Thu', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
-      { label: 'Fri', time: ['09:00 - 12:00', '13:00 - 17:00'] },
-      { label: 'Sat', time: ['10:00 - 12:00', '13:00 - 15:00'] },
-      { label: 'Sun', time: 'Closed', isClosed: true },
-    ]
-  };
-
-  const currentTimings = scenarios[activeScenario];
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center font-sans text-[13px] text-gray-800">
-      
-      {/* Scenario Selector - Just for demonstration purposes */}
-      <div className="mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200 w-full max-w-3xl">
-        <h3 className="font-bold text-gray-700 mb-3 text-base">Select a scenario to preview the UI:</h3>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => setActiveScenario('original')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'original' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Original (7 Days)</button>
-          <button onClick={() => setActiveScenario('allSame')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'allSame' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>All Days Same</button>
-          <button onClick={() => setActiveScenario('weekdayWeekend')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'weekdayWeekend' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Weekday/Weekend</button>
-          <button onClick={() => setActiveScenario('mixedClosed')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'mixedClosed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Sun Closed</button>
-          <button onClick={() => setActiveScenario('customGrouped')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'customGrouped' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Custom Groups</button>
-          <button onClick={() => setActiveScenario('splitMonWed')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'splitMonWed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Split Shifts (Mon-Wed)</button>
-          <button onClick={() => setActiveScenario('splitGroupedDays')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'splitGroupedDays' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Split Shifts (Grouped)</button>
-          <button onClick={() => setActiveScenario('horizontalSplits')} className={`px-4 py-2 rounded text-sm font-medium transition-colors ${activeScenario === 'horizontalSplits' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Horizontal Splits (All Days)</button>
+    <!-- Scenario Selector -->
+    <div class="mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200 w-full max-w-3xl">
+        <h3 class="font-bold text-gray-700 mb-3 text-base">Select a scenario to preview the UI:</h3>
+        <div class="flex flex-wrap gap-2" id="button-container">
+            <button data-scenario="original" onclick="setScenario('original')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-blue-600 text-white">Original (7 Days)</button>
+            <button data-scenario="allSame" onclick="setScenario('allSame')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">All Days Same</button>
+            <button data-scenario="weekdayWeekend" onclick="setScenario('weekdayWeekend')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Weekday/Weekend</button>
+            <button data-scenario="mixedClosed" onclick="setScenario('mixedClosed')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Sun Closed</button>
+            <button data-scenario="customGrouped" onclick="setScenario('customGrouped')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Custom Groups</button>
+            <button data-scenario="splitMonWed" onclick="setScenario('splitMonWed')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Split Shifts (Mon-Wed)</button>
+            <button data-scenario="splitGroupedDays" onclick="setScenario('splitGroupedDays')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Split Shifts (Grouped)</button>
+            <button data-scenario="horizontalSplits" onclick="setScenario('horizontalSplits')" class="scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200">Horizontal Splits (All Days)</button>
         </div>
-      </div>
-
-      {/* Actual Replica of the User's UI */}
-      <div className="w-full max-w-3xl bg-white border border-[#e2e8f0] rounded flex flex-col shadow-sm">
-        
-        {/* Header */}
-        <div className="bg-[#f8fafc] px-4 py-3 border-b border-[#e2e8f0]">
-          <h2 className="font-bold text-[#0f172a] text-sm">5 Panel Drug Order Details</h2>
-        </div>
-
-        {/* Content Body */}
-        <div className="p-4 flex flex-col gap-4">
-          
-          {/* Instructions */}
-          <p className="leading-relaxed">
-            To complete the health screening, this candidate must visit the following<br />
-            location no later than <span className="text-[#ff6b6b]">Wednesday, March 18, 2026.</span>
-          </p>
-
-          <ul className="list-disc pl-8 font-bold text-[#0f172a]">
-            <li>5 Panel Drug</li>
-          </ul>
-
-          {/* Warning Message */}
-          <div className="flex gap-2 text-[#ff4d4f]">
-            <div className="mt-0.5 shrink-0">
-              {/* Custom SVG to perfectly match the filled red exclamation circle */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff4d4f" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="12" fill="#ff4d4f"/>
-                <rect x="11" y="6" width="2" height="8" rx="1" fill="white"/>
-                <circle cx="12" cy="17" r="1.5" fill="white"/>
-              </svg>
-            </div>
-            <p className="leading-snug">
-              This is not an appointment; you (the candidate) should contact the<br />
-              clinic and, if possible, preschedule a visit. Some clinics only offer "Walk-<br />
-              In" & waits may vary. Please plan accordingly.
-            </p>
-          </div>
-
-          {/* Location & Timings Card */}
-          <div className="mt-2 border border-[#cbd5e1] rounded-lg p-4 flex flex-col md:flex-row justify-between gap-6">
-            
-            {/* Left Column: Address */}
-            <div className="flex-[0.8] flex flex-col gap-1.5 leading-snug text-[#0f172a]">
-              <div className="font-bold">CRL</div>
-              <div>Medrite Urgent Care</div>
-              <div>- Williamsburg</div>
-              <div>416 Metropolitan</div>
-              <div>Ave</div>
-              <div>Brooklyn, NY 11211-</div>
-              <div>3377</div>
-              <div>(123) 456-7890</div>
-              <div className="font-bold mt-1">Approx</div>
-              <div className="font-bold">Distance: <span className="font-normal">0.32 miles</span></div>
-            </div>
-
-            {/* Middle Column: Timings (DYNAMIC PART) */}
-            <div className="flex-[1.8] font-semibold text-[#0f172a] overflow-hidden">
-              <div className="flex flex-col gap-1.5">
-                {currentTimings.map((timing, index) => {
-                  // Ensure times are always treated as an array to handle multiple shifts
-                  const times = Array.isArray(timing.time) ? timing.time : [timing.time];
-                  
-                  return (
-                    <div key={index} className="flex gap-2 whitespace-nowrap">
-                      <span className="w-24 inline-block shrink-0">{timing.label}</span>
-                      <span className={`${timing.isClosed ? 'text-red-500' : ''}`}>
-                        {times.join(', ')}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Column: Actions */}
-            <div className="flex flex-col items-end gap-3 flex-[0.7]">
-              <a href="#" className="text-[#0056b3] font-bold text-[11px] uppercase hover:underline">
-                Change Location
-              </a>
-              <a href="#" className="text-[#0056b3] flex items-center gap-1 hover:underline">
-                Get Directions <ExternalLink size={14} />
-              </a>
-            </div>
-
-          </div>
-
-          {/* Download Button */}
-          <button className="mt-2 w-full bg-[#007bff] hover:bg-[#0069d9] text-white font-bold py-3 px-4 rounded flex items-center justify-center gap-2 text-[15px] transition-colors">
-            DOWNLOAD DONOR PASS / ePASSPORT
-            <FileText size={18} />
-          </button>
-
-        </div>
-      </div>
     </div>
-  );
-};
 
-export default App;
+    <!-- Actual Replica of the User's UI -->
+    <div class="w-full max-w-3xl bg-white border border-[#e2e8f0] rounded flex flex-col shadow-sm">
+        
+        <!-- Header -->
+        <div class="bg-[#f8fafc] px-4 py-3 border-b border-[#e2e8f0]">
+            <h2 class="font-bold text-[#0f172a] text-sm">5 Panel Drug Order Details</h2>
+        </div>
+
+        <!-- Content Body -->
+        <div class="p-4 flex flex-col gap-4">
+            
+            <!-- Instructions -->
+            <p class="leading-relaxed">
+                To complete the health screening, this candidate must visit the following<br />
+                location no later than <span class="text-[#ff6b6b]">Wednesday, March 18, 2026.</span>
+            </p>
+
+            <ul class="list-disc pl-8 font-bold text-[#0f172a]">
+                <li>5 Panel Drug</li>
+            </ul>
+
+            <!-- Warning Message -->
+            <div class="flex gap-2 text-[#ff4d4f]">
+                <div class="mt-0.5 shrink-0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff4d4f" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="12" fill="#ff4d4f"/>
+                        <rect x="11" y="6" width="2" height="8" rx="1" fill="white"/>
+                        <circle cx="12" cy="17" r="1.5" fill="white"/>
+                    </svg>
+                </div>
+                <p class="leading-snug">
+                    This is not an appointment; you (the candidate) should contact the<br />
+                    clinic and, if possible, preschedule a visit. Some clinics only offer "Walk-<br />
+                    In" & waits may vary. Please plan accordingly.
+                </p>
+            </div>
+
+            <!-- Location & Timings Card -->
+            <div class="mt-2 border border-[#cbd5e1] rounded-lg p-4 flex flex-col md:flex-row justify-between gap-6">
+                
+                <!-- Left Column: Address -->
+                <div class="flex-[0.8] flex flex-col gap-1.5 leading-snug text-[#0f172a]">
+                    <div class="font-bold">CRL</div>
+                    <div>Medrite Urgent Care</div>
+                    <div>- Williamsburg</div>
+                    <div>416 Metropolitan</div>
+                    <div>Ave</div>
+                    <div>Brooklyn, NY 11211-</div>
+                    <div>3377</div>
+                    <div>(123) 456-7890</div>
+                    <div class="font-bold mt-1">Approx</div>
+                    <div class="font-bold">Distance: <span class="font-normal">0.32 miles</span></div>
+                </div>
+
+                <!-- Middle Column: Timings (DYNAMIC PART injected by JS) -->
+                <div id="timings-container" class="flex-[1.8] font-semibold text-[#0f172a] overflow-hidden">
+                    <!-- Javascript will inject timings here -->
+                </div>
+
+                <!-- Right Column: Actions -->
+                <div class="flex flex-col items-end gap-3 flex-[0.7]">
+                    <a href="#" class="text-[#0056b3] font-bold text-[11px] uppercase hover:underline">
+                        Change Location
+                    </a>
+                    <a href="#" class="text-[#0056b3] flex items-center gap-1 hover:underline">
+                        Get Directions 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Download Button -->
+            <button class="mt-2 w-full bg-[#007bff] hover:bg-[#0069d9] text-white font-bold py-3 px-4 rounded flex items-center justify-center gap-2 text-[15px] transition-colors">
+                DOWNLOAD DONOR PASS / ePASSPORT
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Definitions for the different timing scenarios
+    const scenarios = {
+        original: [
+            { label: 'Mon', time: '09:00 - 20:30' },
+            { label: 'Tue', time: '09:00 - 20:30' },
+            { label: 'Wed', time: '09:00 - 20:30' },
+            { label: 'Thu', time: '09:00 - 20:30' },
+            { label: 'Fri', time: '09:00 - 20:30' },
+            { label: 'Sat', time: '09:00 - 20:30' },
+            { label: 'Sun', time: '09:00 - 20:30' },
+        ],
+        allSame: [
+            { label: 'Mon - Sun', time: '09:00 - 20:30' },
+        ],
+        weekdayWeekend: [
+            { label: 'Mon - Fri', time: '09:00 - 17:00' },
+            { label: 'Sat - Sun', time: '10:00 - 14:00' },
+        ],
+        mixedClosed: [
+            { label: 'Mon - Fri', time: '09:00 - 17:00' },
+            { label: 'Sat', time: '10:00 - 15:00' },
+            { label: 'Sun', time: 'Closed', isClosed: true },
+        ],
+        customGrouped: [
+            { label: 'Mon - Wed', time: '09:00 - 17:00' },
+            { label: 'Thu - Fri', time: '11:00 - 19:00' },
+            { label: 'Sat - Sun', time: '10:00 - 14:00' },
+        ],
+        splitMonWed: [
+            { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Wed', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Thu - Fri', time: '09:00 - 17:00' },
+            { label: 'Sat - Sun', time: 'Closed', isClosed: true },
+        ],
+        splitGroupedDays: [
+            { label: 'Mon - Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+            { label: 'Thu - Fri', time: ['10:00 - 14:00', '16:00 - 20:00'] },
+            { label: 'Sat - Sun', time: 'Closed', isClosed: true },
+        ],
+        horizontalSplits: [
+            { label: 'Mon', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Tue', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Wed', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+            { label: 'Thu', time: ['09:00 - 10:00', '11:00 - 14:00', '15:00 - 17:00'] },
+            { label: 'Fri', time: ['09:00 - 12:00', '13:00 - 17:00'] },
+            { label: 'Sat', time: ['10:00 - 12:00', '13:00 - 15:00'] },
+            { label: 'Sun', time: 'Closed', isClosed: true },
+        ]
+    };
+
+    function setScenario(scenarioKey) {
+        // 1. Update the UI Timings
+        const currentTimings = scenarios[scenarioKey];
+        const container = document.getElementById('timings-container');
+        
+        let htmlContent = '<div class="flex flex-col gap-1.5">';
+        
+        currentTimings.forEach(timing => {
+            // Ensure times are treated as arrays to join them with commas
+            const times = Array.isArray(timing.time) ? timing.time : [timing.time];
+            const textClass = timing.isClosed ? 'text-red-500' : '';
+            const timesString = times.join(', ');
+
+            htmlContent += `
+                <div class="flex gap-2 whitespace-nowrap">
+                    <span class="w-24 inline-block shrink-0">${timing.label}</span>
+                    <span class="${textClass}">${timesString}</span>
+                </div>
+            `;
+        });
+        
+        htmlContent += '</div>';
+        container.innerHTML = htmlContent;
+
+        // 2. Update Button Active States
+        const buttons = document.querySelectorAll('.scenario-btn');
+        buttons.forEach(btn => {
+            if (btn.getAttribute('data-scenario') === scenarioKey) {
+                // Active button classes
+                btn.className = "scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-blue-600 text-white";
+            } else {
+                // Inactive button classes
+                btn.className = "scenario-btn px-4 py-2 rounded text-sm font-medium transition-colors bg-gray-100 text-gray-600 hover:bg-gray-200";
+            }
+        });
+    }
+
+    // Initialize with the original scenario on page load
+    window.onload = () => {
+        setScenario('original');
+    };
+</script>
+
+</body>
+</html>
